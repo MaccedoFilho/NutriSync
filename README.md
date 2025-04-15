@@ -75,8 +75,4 @@ Uma aplicação full stack para registrar, visualizar, editar e excluir refeiç�
 
 ## Autor
 
-Seu Nome
-
-## Licença
-
-MIT
+Ricardo Macedo Filho
