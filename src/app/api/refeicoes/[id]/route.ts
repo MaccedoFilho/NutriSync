@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { RefeicaoRepository } from '@/core/infrastructure/database/repositories/refeicao.repository';
 import { refeicaoUpdateSchema } from '@/core/infrastructure/validators/refeicao.validator';
 import { ZodError } from 'zod';
 import { RefeicaoUpdateDTO } from '@/core/domain/dtos/refeicao.dto';
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     
     if (!id) {
       return NextResponse.json(
@@ -38,11 +38,11 @@ export async function GET(
 }
 
 export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     
     if (!id) {
       return NextResponse.json(
@@ -93,11 +93,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     
     if (!id) {
       return NextResponse.json(
