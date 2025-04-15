@@ -1,0 +1,173 @@
+import { useState, useEffect, useCallback } from 'react';
+import { IRefeicao } from '@/core/domain/entities/refeicao.entity';
+import { TipoRefeicao } from '@/core/domain/enums/tipo-refeicao.enum';
+
+interface UseRefeicoesReturn {
+  refeicoes: IRefeicao[];
+  isLoading: boolean;
+  error: string | null;
+  adicionarRefeicao: (refeicao: Omit<IRefeicao, '_id'>) => Promise<IRefeicao | null>;
+  atualizarRefeicao: (id: string, refeicao: Partial<IRefeicao>) => Promise<IRefeicao | null>;
+  removerRefeicao: (id: string) => Promise<boolean>;
+  toggleFavorito: (id: string) => Promise<IRefeicao | null>;
+  filtrarPorTipo: (tipo: TipoRefeicao | null) => void;
+  refeicoesHoje: IRefeicao[];
+  totalCaloriasHoje: number;
+  tipoSelecionado: TipoRefeicao | null;
+  recarregarRefeicoes: () => Promise<void>;
+}
+
+export function useRefeicoes(): UseRefeicoesReturn {
+  const [refeicoes, setRefeicoes] = useState<IRefeicao[]>([]);
+  const [refeicoesOriginal, setRefeicoesOriginal] = useState<IRefeicao[]>([]);
+  const [refeicoesHoje, setRefeicoesHoje] = useState<IRefeicao[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [tipoSelecionado, setTipoSelecionado] = useState<TipoRefeicao | null>(null);
+  const [totalCaloriasHoje, setTotalCaloriasHoje] = useState(0);
+
+  const carregarRefeicoes = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/refeicoes');
+      
+      if (!response.ok) {
+        throw new Error('Falha ao carregar refeições');
+      }
+      
+      const data = await response.json();
+      setRefeicoesOriginal(data);
+      setRefeicoes(tipoSelecionado ? data.filter((r: IRefeicao) => r.tipo === tipoSelecionado) : data);
+      
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      const amanha = new Date(hoje);
+      amanha.setDate(amanha.getDate() + 1);
+      
+      const refeicoesDeHoje = data.filter((refeicao: IRefeicao) => {
+        const dataRefeicao = new Date(refeicao.data);
+        dataRefeicao.setHours(0, 0, 0, 0);
+        return dataRefeicao.getTime() >= hoje.getTime() && dataRefeicao.getTime() < amanha.getTime();
+      });
+      
+      setRefeicoesHoje(refeicoesDeHoje);
+      
+      const totalCalorias = refeicoesDeHoje.reduce(
+        (total: number, refeicao: IRefeicao) => total + refeicao.calorias, 
+        0
+      );
+      
+      setTotalCaloriasHoje(totalCalorias);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [tipoSelecionado]);
+
+  useEffect(() => {
+    carregarRefeicoes();
+  }, [carregarRefeicoes]);
+
+  const adicionarRefeicao = async (refeicao: Omit<IRefeicao, '_id'>): Promise<IRefeicao | null> => {
+    try {
+      const response = await fetch('/api/refeicoes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(refeicao),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Falha ao adicionar refeição');
+      }
+      
+      const novaRefeicao = await response.json();
+      await carregarRefeicoes();
+      return novaRefeicao;
+    } catch (err) {
+      setError((err as Error).message);
+      return null;
+    }
+  };
+
+  const atualizarRefeicao = async (id: string, refeicao: Partial<IRefeicao>): Promise<IRefeicao | null> => {
+    try {
+      const response = await fetch(`/api/refeicoes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(refeicao),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Falha ao atualizar refeição');
+      }
+      
+      const refeicaoAtualizada = await response.json();
+      await carregarRefeicoes();
+      return refeicaoAtualizada;
+    } catch (err) {
+      setError((err as Error).message);
+      return null;
+    }
+  };
+
+  const removerRefeicao = async (id: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`/api/refeicoes/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Falha ao remover refeição');
+      }
+      
+      await carregarRefeicoes();
+      return true;
+    } catch (err) {
+      setError((err as Error).message);
+      return false;
+    }
+  };
+
+  const toggleFavorito = async (id: string): Promise<IRefeicao | null> => {
+    try {
+      const refeicao = refeicoes.find((r: IRefeicao) => r._id === id);
+      if (!refeicao) return null;
+      
+      return await atualizarRefeicao(id, { favorito: !refeicao.favorito });
+    } catch (err) {
+      setError((err as Error).message);
+      return null;
+    }
+  };
+
+  const filtrarPorTipo = (tipo: TipoRefeicao | null) => {
+    setTipoSelecionado(tipo);
+    if (tipo) {
+      setRefeicoes(refeicoesOriginal.filter((r: IRefeicao) => r.tipo === tipo));
+    } else {
+      setRefeicoes(refeicoesOriginal);
+    }
+  };
+
+  return {
+    refeicoes,
+    isLoading,
+    error,
+    adicionarRefeicao,
+    atualizarRefeicao,
+    removerRefeicao,
+    toggleFavorito,
+    filtrarPorTipo,
+    refeicoesHoje,
+    totalCaloriasHoje,
+    tipoSelecionado,
+    recarregarRefeicoes: carregarRefeicoes,
+  };
+} 
