@@ -1,32 +1,38 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { RefeicaoRepository } from '@/core/infrastructure/database/repositories/refeicao.repository';
 import { refeicaoUpdateSchema } from '@/core/infrastructure/validators/refeicao.validator';
 import { ZodError } from 'zod';
 import { RefeicaoUpdateDTO } from '@/core/domain/dtos/refeicao.dto';
 
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
-    
+    const { id } = context.params;
+
     if (!id) {
       return NextResponse.json(
         { error: 'ID da refeição não fornecido' },
         { status: 400 }
       );
     }
-    
+
     const refeicao = await RefeicaoRepository.findById(id);
-    
+
     if (!refeicao) {
       return NextResponse.json(
         { error: 'Refeição não encontrada' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(refeicao);
   } catch (error) {
     console.error('Erro ao buscar refeição por ID:', error);
@@ -38,45 +44,45 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
-    
+    const { id } = context.params;
+
     if (!id) {
       return NextResponse.json(
         { error: 'ID da refeição não fornecido' },
         { status: 400 }
       );
     }
-    
+
     const data = await request.json();
-    
+
     try {
       const validatedData = refeicaoUpdateSchema.parse(data);
-      
+
       const formattedData: RefeicaoUpdateDTO = {
         ...validatedData,
         data: validatedData.data instanceof Date ? validatedData.data.toISOString() : validatedData.data
       };
-      
+
       const refeicaoAtualizada = await RefeicaoRepository.update(id, formattedData);
-      
+
       if (!refeicaoAtualizada) {
         return NextResponse.json(
           { error: 'Refeição não encontrada' },
           { status: 404 }
         );
       }
-      
+
       return NextResponse.json(refeicaoAtualizada);
     } catch (validationError) {
       if (validationError instanceof ZodError) {
         return NextResponse.json(
-          { 
+          {
             error: 'Dados de atualização inválidos',
-            details: validationError.errors 
+            details: validationError.errors
           },
           { status: 400 }
         );
@@ -93,28 +99,28 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: RouteContext
 ) {
   try {
-    const { id } = await params;
-    
+    const { id } = context.params;
+
     if (!id) {
       return NextResponse.json(
         { error: 'ID da refeição não fornecido' },
         { status: 400 }
       );
     }
-    
+
     const refeicaoDeletada = await RefeicaoRepository.delete(id);
-    
+
     if (!refeicaoDeletada) {
       return NextResponse.json(
         { error: 'Refeição não encontrada' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(
       { message: 'Refeição removida com sucesso', data: refeicaoDeletada }
     );
