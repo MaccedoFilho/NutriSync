@@ -1,4 +1,4 @@
-# MealTracker
+# NutrSync
 
 Uma aplicação full stack para registrar, visualizar, editar e excluir refeições diárias.
 
