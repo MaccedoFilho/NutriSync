@@ -4,18 +4,14 @@ import { refeicaoUpdateSchema } from '@/core/infrastructure/validators/refeicao.
 import { ZodError } from 'zod';
 import { RefeicaoUpdateDTO } from '@/core/domain/dtos/refeicao.dto';
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
+function getIdFromRequest(request: NextRequest) {
+  // Extrai o último segmento da URL como o id
+  return request.nextUrl.pathname.split('/').pop();
+}
 
-export async function GET(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function GET(request: NextRequest) {
   try {
-    const { id } = context.params;
+    const id = getIdFromRequest(request);
 
     if (!id) {
       return NextResponse.json(
@@ -43,12 +39,9 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function PUT(request: NextRequest) {
   try {
-    const { id } = context.params;
+    const id = getIdFromRequest(request);
 
     if (!id) {
       return NextResponse.json(
@@ -64,7 +57,9 @@ export async function PUT(
 
       const formattedData: RefeicaoUpdateDTO = {
         ...validatedData,
-        data: validatedData.data instanceof Date ? validatedData.data.toISOString() : validatedData.data
+        data: validatedData.data instanceof Date
+          ? validatedData.data.toISOString()
+          : validatedData.data
       };
 
       const refeicaoAtualizada = await RefeicaoRepository.update(id, formattedData);
@@ -98,12 +93,9 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function DELETE(request: NextRequest) {
   try {
-    const { id } = context.params;
+    const id = getIdFromRequest(request);
 
     if (!id) {
       return NextResponse.json(
