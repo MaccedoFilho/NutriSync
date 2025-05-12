@@ -115,7 +115,7 @@ export default function RefeicoesPage() {
           <div className="flex items-center">
             <div className="text-blue-600 text-4xl mr-3">🍲</div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">MealTracker</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">NutriSync</h1>
               <p className="text-sm text-gray-600">Gerencie suas refeições com facilidade</p>
             </div>
           </div>
