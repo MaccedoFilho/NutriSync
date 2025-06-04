@@ -152,7 +152,20 @@ export function useRefeicoes(): UseRefeicoesReturn {
   const removerRefeicao = async (id: string): Promise<boolean> => {
     try {
       await RefeicaoService.delete(id);
-      await carregarRefeicoes();
+      
+      const novasRefeicoesOriginal = refeicoesOriginal.filter(r => r._id !== id);
+      setRefeicoesOriginal(novasRefeicoesOriginal);
+      
+      if (tipoSelecionado) {
+        setRefeicoes(novasRefeicoesOriginal.filter(r => r.tipo === tipoSelecionado));
+      } else {
+        setRefeicoes(novasRefeicoesOriginal);
+      }
+      
+      const novasRefeicoesHoje = refeicoesHoje.filter(r => r._id !== id);
+      setRefeicoesHoje(novasRefeicoesHoje);
+      setTotalCaloriasHoje(calcularTotalCalorias(novasRefeicoesHoje));
+      
       return true;
     } catch (err) {
       setError((err as Error).message);

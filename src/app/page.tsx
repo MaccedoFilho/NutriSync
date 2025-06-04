@@ -23,25 +23,25 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('/img/grid.svg')] bg-center opacity-5 z-0 animate-pulse"></div>
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 relative z-10">
             <div className="pt-20 pb-24 px-4 sm:px-6 lg:pt-32 lg:pb-36 lg:px-8">
-              <div className="text-center relative animate-fadeIn">
-                <div className="absolute -top-10 -left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-float"></div>
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-200 rounded-full opacity-20 animate-float-delayed"></div>
+              <div className="text-center relative">
+                <div className="absolute -top-10 -left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-bounce"></div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-200 rounded-full opacity-20 animate-bounce"></div>
                 
-                <h1 className="text-5xl tracking-tight font-extrabold sm:text-6xl md:text-7xl group animate-slideUp">
+                <h1 className="text-5xl tracking-tight font-extrabold sm:text-6xl md:text-7xl group">
                   <span className="block text-gray-900 mb-2 group-hover:text-blue-900 transition-colors duration-300">Controle sua alimentação</span>
-                  <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 group-hover:from-blue-500 group-hover:to-indigo-600 transition-all duration-500 animate-gradient">com o NutriSync</span>
+                  <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 group-hover:from-blue-500 group-hover:to-indigo-600 transition-all duration-500">com o NutriSync</span>
                 </h1>
-                <p className="mt-6 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-8 md:text-xl md:max-w-3xl leading-relaxed hover:text-gray-800 transition-colors duration-300 animate-fadeIn">
+                <p className="mt-6 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-8 md:text-xl md:max-w-3xl leading-relaxed hover:text-gray-800 transition-colors duration-300">
                   Registre suas refeições, acompanhe suas calorias e mantenha hábitos alimentares saudáveis.
                 </p>
-                <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10 animate-slideUp" style={{ animationDelay: '0.2s' }}>
+                <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
                   <div className="rounded-md shadow-lg relative overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                     <Link 
                       href="/refeicoes" 
                       className={`w-full flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-indigo-600 transform hover:scale-110 transition-all duration-300 hover:shadow-xl md:py-5 md:text-lg md:px-10 ${pulseButton ? 'animate-pulse' : ''}`}
                       onClick={handleButtonPulse}
-                      onMouseEnter={() => handleButtonPulse()}
+                      onMouseEnter={handleButtonPulse}
                     >
                       <span className="mr-2">Começar Agora</span>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
@@ -70,14 +70,14 @@ export default function Home() {
 
         <div id="recursos" className="py-16 bg-gradient-to-b from-blue-50 to-white overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="absolute -top-20 -left-20 w-40 h-40 bg-blue-100 rounded-full opacity-30 animate-float-delayed"></div>
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-indigo-100 rounded-full opacity-30 animate-float"></div>
+            <div className="absolute -top-20 -left-20 w-40 h-40 bg-blue-100 rounded-full opacity-30 animate-bounce"></div>
+            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-indigo-100 rounded-full opacity-30 animate-bounce"></div>
             
-            <div className="lg:text-center relative z-10 animate-slideUp">
+            <div className="lg:text-center relative z-10">
               <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase bg-blue-50 rounded-full px-3 py-1 inline-block mb-1 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all duration-300 transform hover:scale-105 cursor-default">
                 RECURSOS
               </h2>
-              <p className="mt-4 text-4xl md:text-5xl leading-tight font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-indigo-600 transition-all duration-500 animate-gradient">
+              <p className="mt-4 text-4xl md:text-5xl leading-tight font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-indigo-600 transition-all duration-500">
                 Uma maneira melhor de registrar sua alimentação
               </p>
               <p className="mt-5 max-w-3xl text-xl text-gray-600 lg:mx-auto leading-relaxed hover:text-gray-800 transition-colors duration-300">
@@ -158,10 +158,10 @@ export default function Home() {
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/img/grid.svg')] bg-center opacity-5 animate-pulse"></div>
           <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between relative z-10">
             <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              <span className="block animate-slideUp" style={{ animationDelay: '0.1s' }}>Pronto para começar?</span>
-              <span className="block text-blue-200 hover:text-white transition-colors duration-300 animate-slideUp" style={{ animationDelay: '0.2s' }}>Comece a registrar suas refeições hoje.</span>
+              <span className="block">Pronto para começar?</span>
+              <span className="block text-blue-200 hover:text-white transition-colors duration-300">Comece a registrar suas refeições hoje.</span>
             </h2>
-            <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0 animate-slideUp" style={{ animationDelay: '0.3s' }}>
+            <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
               <div className="inline-flex rounded-md shadow hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-blue-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 <Link 
@@ -255,98 +255,14 @@ export default function Home() {
             
             <div className="relative w-full max-w-4xl mx-auto mt-2 overflow-hidden h-px bg-gradient-to-r from-transparent via-blue-100 to-transparent"></div>
             
-            <div className="mt-6 relative group cursor-pointer" id="footerCopyright">
+            <div className="mt-6 relative group cursor-pointer">
               <p className="text-center text-base text-gray-500 transition-all duration-300 transform group-hover:scale-105 group-hover:text-blue-600">
                 © 2024 NutriSync. Todos os direitos reservados.
               </p>
-              <div className="heart-animation absolute opacity-0 -top-4 left-1/2 transform -translate-x-1/2 text-red-500 text-lg">❤️</div>
             </div>
           </div>
         </div>
       </footer>
     </div>
   );
-}
-
-const styles = `
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes slideUp {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes floatDelayed {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0); }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 1s ease-out forwards;
-}
-
-.animate-slideUp {
-  animation: slideUp 0.8s ease-out forwards;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 3s ease infinite;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: floatDelayed 8s ease-in-out infinite;
-}
-`;
-
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.type = 'text/css';
-  styleSheet.innerText = styles + `
-    @keyframes heartBeat {
-      0% { transform: translateY(0) scale(0); opacity: 0; }
-      50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
-      100% { transform: translateY(-40px) scale(1); opacity: 0; }
-    }
-    
-    .heart-animation {
-      animation: heartBeat 1s ease-out forwards;
-    }
-  `;
-  document.head.appendChild(styleSheet);
-  
-  // Adicionar interação para o copyright no rodapé
-  setTimeout(() => {
-    const copyright = document.getElementById('footerCopyright');
-    if (copyright) {
-      copyright.addEventListener('click', () => {
-        const heart = copyright.querySelector('.heart-animation');
-        if (heart) {
-          heart.classList.remove('heart-animation');
-          void (heart as HTMLElement).offsetWidth; // Força reflow com type casting
-          heart.classList.add('heart-animation');
-        }
-      });
-    }
-  }, 1000);
 }

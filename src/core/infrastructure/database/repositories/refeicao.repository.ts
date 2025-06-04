@@ -9,56 +9,61 @@ import { TipoRefeicao } from '../../../domain/enums/tipo-refeicao.enum';
 const inMemoryDb: IRefeicao[] = [];
 
 let isDevMode = false;
+let devDataInitialized = false; 
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
 
 const initializeDevData = () => {
-  if (inMemoryDb.length === 0) {
-    const agora = new Date();
-    const ontem = new Date(agora);
-    ontem.setDate(ontem.getDate() - 1);
-    const amanha = new Date(agora);
-    amanha.setDate(amanha.getDate() + 1);
-    
-    const exemploRefeicoes: IRefeicao[] = [
-      {
-        _id: generateId(),
-        nome: 'Café da Manhã',
-        descricao: 'Pão integral com ovos mexidos e suco de laranja',
-        calorias: 450,
-        data: new Date(agora.setHours(8, 0, 0, 0)),
-        tipo: TipoRefeicao.CAFE_DA_MANHA,
-        favorito: true,
-        createdAt: ontem,
-        updatedAt: ontem
-      },
-      {
-        _id: generateId(),
-        nome: 'Almoço',
-        descricao: 'Arroz, feijão, filé de frango grelhado e salada',
-        calorias: 680,
-        data: new Date(agora.setHours(12, 30, 0, 0)),
-        tipo: TipoRefeicao.ALMOCO,
-        favorito: false,
-        createdAt: ontem,
-        updatedAt: ontem
-      },
-      {
-        _id: generateId(),
-        nome: 'Lanche da Tarde',
-        descricao: 'Iogurte com granola e mel',
-        calorias: 320,
-        data: new Date(agora.setHours(16, 0, 0, 0)),
-        tipo: TipoRefeicao.LANCHE,
-        favorito: false,
-        createdAt: ontem,
-        updatedAt: ontem
-      }
-    ];
-    
-    inMemoryDb.push(...exemploRefeicoes);
-    console.log('Dados de exemplo inicializados para modo de desenvolvimento');
+  if (devDataInitialized || inMemoryDb.length > 0) {
+    return;
   }
+  
+  devDataInitialized = true;
+  
+  const agora = new Date();
+  const ontem = new Date(agora);
+  ontem.setDate(ontem.getDate() - 1);
+  const amanha = new Date(agora);
+  amanha.setDate(amanha.getDate() + 1);
+  
+  const exemploRefeicoes: IRefeicao[] = [
+    {
+      _id: generateId(),
+      nome: 'Café da Manhã',
+      descricao: 'Pão integral com ovos mexidos e suco de laranja',
+      calorias: 450,
+      data: new Date(agora.setHours(8, 0, 0, 0)),
+      tipo: TipoRefeicao.CAFE_DA_MANHA,
+      favorito: true,
+      createdAt: ontem,
+      updatedAt: ontem
+    },
+    {
+      _id: generateId(),
+      nome: 'Almoço',
+      descricao: 'Arroz, feijão, filé de frango grelhado e salada',
+      calorias: 680,
+      data: new Date(agora.setHours(12, 30, 0, 0)),
+      tipo: TipoRefeicao.ALMOCO,
+      favorito: false,
+      createdAt: ontem,
+      updatedAt: ontem
+    },
+    {
+      _id: generateId(),
+      nome: 'Lanche da Tarde',
+      descricao: 'Iogurte com granola e mel',
+      calorias: 320,
+      data: new Date(agora.setHours(16, 0, 0, 0)),
+      tipo: TipoRefeicao.LANCHE,
+      favorito: false,
+      createdAt: ontem,
+      updatedAt: ontem
+    }
+  ];
+  
+  inMemoryDb.push(...exemploRefeicoes);
+  console.log('Dados de exemplo inicializados para modo de desenvolvimento');
 };
 
 export class RefeicaoRepository {
