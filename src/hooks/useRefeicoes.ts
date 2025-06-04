@@ -7,7 +7,7 @@ const apiUrl = '/api/refeicoes';
 
 class RefeicaoService {
   static async getAll(): Promise<IRefeicao[]> {
-    const response = await fetch(apiUrl);
+    const response = await fetch(`${apiUrl}?t=${Date.now()}`);
     if (!response.ok) {
       throw new Error('Erro ao buscar refeições');
     }
@@ -15,7 +15,7 @@ class RefeicaoService {
   }
 
   static async getById(id: string): Promise<IRefeicao> {
-    const response = await fetch(`${apiUrl}/${id}`);
+    const response = await fetch(`${apiUrl}/${id}?t=${Date.now()}`);
     if (!response.ok) {
       throw new Error('Erro ao buscar refeição');
     }
@@ -24,7 +24,7 @@ class RefeicaoService {
 
   static async getToday(): Promise<IRefeicao[]> {
     const today = new Date().toISOString().split('T')[0];
-    const response = await fetch(`${apiUrl}?dataInicio=${today}`);
+    const response = await fetch(`${apiUrl}?dataInicio=${today}&t=${Date.now()}`);
     if (!response.ok) {
       throw new Error('Erro ao buscar refeições de hoje');
     }
