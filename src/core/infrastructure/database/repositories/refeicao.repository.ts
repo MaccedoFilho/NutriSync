@@ -9,11 +9,13 @@ import { TipoRefeicao } from '../../../domain/enums/tipo-refeicao.enum';
 const inMemoryDb: IRefeicao[] = [];
 
 let isDevMode = false;
-let devDataInitialized = false; 
+let devDataInitialized = false;
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
 
 const initializeDevData = () => {
+  return;
+  
   if (devDataInitialized || inMemoryDb.length > 0) {
     return;
   }
